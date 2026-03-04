@@ -1,0 +1,87 @@
+# SPRING BOOT + JAVA + MAVEN/GRADLE
+
+# Compiled class files & JARs
+target/
+build/
+*.jar
+*.war
+*.ear
+lib/
+*.class
+
+# Maven
+.m2/
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Logs
+*.log
+spring.log
+logs/
+lombok.log
+
+# Environment & Secrets
+application.properties
+application.yml
+application-*.properties
+application-*.yml
+application-*.yaml
+bootstrap.properties
+bootstrap.yml
+.env
+*.key
+*.p12
+*.jks
+keystore
+client-secret.json
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/
+target/generated-test-sources/
+.eclipse
+
+# OS generated
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+*.h2.db
+
+# Testing
+**/target/surefire-reports/
+**/target/failsafe-reports/
+**/coverage/
+**/jacoco/
+
+# Docker
+Dockerfile.user
+.dockerignore.local
+
+# Temporary
+tmp/
+temp/
