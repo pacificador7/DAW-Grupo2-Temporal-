@@ -2,3 +2,6 @@
 
 ## Integrantes:
 
+*Ghilmer Eduardo De La cruz Ventura - DV24003
+
+
