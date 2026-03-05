@@ -3,4 +3,5 @@
 ## Integrantes:
 
 - Ghilmer Eduardo De La cruz Ventura - DV24003
+- Bryan Jose Moreno Villanueva - MV24050
 - José Fabricio Reyes Sermeño - RS24033
