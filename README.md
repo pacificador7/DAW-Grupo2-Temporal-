@@ -2,6 +2,5 @@
 
 ## Integrantes:
 
-*Ghilmer Eduardo De La cruz Ventura - DV24003
-
-
+- Ghilmer Eduardo De La cruz Ventura - DV24003
+- José Fabricio Reyes Sermeño - RS24033
