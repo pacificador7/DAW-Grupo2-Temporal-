@@ -14,7 +14,7 @@ public class TareaService {
     @Autowired
     private TareaRepository repository;
 
-    // 🔹 ENTITY → DTO
+    // Entity a DTO
     public TareaDTO toDTO(Tarea tarea) {
         TareaDTO dto = new TareaDTO();
         dto.setId(tarea.getId());
@@ -26,7 +26,7 @@ public class TareaService {
         return dto;
     }
 
-    // 🔹 DTO → ENTITY
+    // DTO a Entity
     public Tarea toEntity(TareaDTO dto) {
         Tarea tarea = new Tarea();
         tarea.setId(dto.getId());
@@ -38,7 +38,7 @@ public class TareaService {
         return tarea;
     }
 
-    // 🔹 CRUD
+    // CRUD
 
     public List<TareaDTO> listar() {
         return repository.findAll()
