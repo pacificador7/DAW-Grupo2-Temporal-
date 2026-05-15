@@ -115,3 +115,74 @@ document.addEventListener('DOMContentLoaded', () => {
         limpiarFiltrosBtn.addEventListener('click', limpiarFiltros);
     }
 });
+// =============================================
+// FORMULARIO CREAR TAREA (POST) - Persona 3
+// =============================================
+
+function limpiarFormCrear() {
+    const form = document.getElementById('form-crear');
+    if (!form) return;
+    form.reset();
+    // Quitar errores visuales
+    form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+    form.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+    document.getElementById('msg-crear').style.display = 'none';
+}
+
+function validarCampo(id, errId) {
+    const el = document.getElementById(id);
+    const err = document.getElementById(errId);
+    if (!el || !err) return true;
+    if (!el.value.trim()) {
+        el.classList.add('input-error');
+        err.style.display = 'block';
+        return false;
+    }
+    el.classList.remove('input-error');
+    err.style.display = 'none';
+    return true;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const formCrear = document.getElementById('form-crear');
+    if (!formCrear) return;
+
+    formCrear.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const camposValidos = [
+            validarCampo('crear-nombre',      'err-crear-nombre'),
+            validarCampo('crear-descripcion', 'err-crear-descripcion'),
+            validarCampo('crear-estado',      'err-crear-estado'),
+            validarCampo('crear-fecha',       'err-crear-fecha'),
+        ].every(Boolean);
+
+        if (!camposValidos) return;
+
+        // Convertir fecha de YYYY-MM-DD a DD-MM-YYYY (igual que el mock data)
+        const fechaRaw = document.getElementById('crear-fecha').value;
+        const [y, m, d] = fechaRaw.split('-');
+        const fechaFormateada = `${d}-${m}-${y}`;
+
+        // Crear objeto tarea nuevo
+        const nuevaTarea = {
+            id: mockTareas.length + 1,
+            nombre:      document.getElementById('crear-nombre').value.trim(),
+            descripcion: document.getElementById('crear-descripcion').value.trim(),
+            estado:      document.getElementById('crear-estado').value,
+            fecha:       fechaFormateada,
+        };
+
+        // Agregar al array y refrescar tabla
+        mockTareas.push(nuevaTarea);
+        cargarTareas();
+
+        // Mostrar mensaje de éxito y limpiar
+        limpiarFormCrear();
+        const msg = document.getElementById('msg-crear');
+        if (msg) {
+            msg.style.display = 'block';
+            setTimeout(() => msg.style.display = 'none', 3000);
+        }
+    });
+});
