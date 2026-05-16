@@ -303,3 +303,110 @@ body{
         flex-direction: column;
     }
 }
+
+
+/*PUT */
+
+.btn-buscar {
+    padding: 8px 14px;
+    background-color: #334155;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.btn-buscar:hover {
+    background-color: #475569;
+}
+
+.msg-error {
+    margin-top: 10px;
+    color: #c53030;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/*delete */
+
+.btn-eliminar {
+    padding: 8px 14px;
+    background-color: #c53030;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+}
+
+.btn-eliminar:hover {
+    background-color: #9b2c2c;
+}
+
+.btn-eliminar-confirmar {
+    flex: 2;
+    padding: 9px;
+    background-color: #c53030;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-eliminar-confirmar:hover {
+    background-color: #9b2c2c;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
+.modal-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 101;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.modal-icono {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.modal-box h4 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.modal-info {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+    font-style: italic;
+}
+
+.modal-advertencia {
+    font-size: 13px;
+    color: #c53030;
+    margin-bottom: 20px;
+}

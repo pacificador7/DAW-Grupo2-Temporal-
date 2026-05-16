@@ -77,18 +77,90 @@
                     <button type="submit" class="btn-crear">Crear tarea</button>
                 </div>
             </form>
-            <p id="msg-crear" class="msg-exito" style="display:none;">✓ Tarea creada correctamente.</p>
+            <p id="msg-crear" class="msg-exito" style="display:none;">Tarea creada correctamente.</p>
         </section>
 
         <!-- PUT -->
-        <section class="seccion" id="editar">
-            <h3>Editar tarea</h3>
-        </section>
+<section class="seccion" id="editar">
+    <h3>Editar tarea</h3>
+    <form id="form-editar" novalidate>
+        <div class="form-group">
+            <label for="editar-id">ID de la tarea a editar <span class="obligatorio">*</span></label>
+            <div style="display:flex; gap:8px; align-items:center;">
+                <input type="number" id="editar-id" name="id" placeholder="Ej: 1" min="1" style="width:100px;" />
+                <button type="button" class="btn-buscar" onclick="buscarTareaParaEditar()">Buscar</button>
+            </div>
+            <span class="error-msg" id="err-editar-id">Ingresa un ID válido.</span>
+        </div>
 
-        <!-- DELETE -->
-        <section class="seccion" id="eliminar">
-            <h3>Eliminar tarea</h3>
-        </section>
+        <div id="campos-editar" style="display:none;">
+            <div class="form-group">
+                <label for="editar-nombre">Nombre <span class="obligatorio">*</span></label>
+                <input type="text" id="editar-nombre" name="nombre" placeholder="Nombre de la tarea" maxlength="150" />
+                <span class="error-msg" id="err-editar-nombre">Este campo es obligatorio.</span>
+            </div>
+            <div class="form-group">
+                <label for="editar-descripcion">Descripción</label>
+                <textarea id="editar-descripcion" name="descripcion" placeholder="Descripción de la tarea"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="editar-estado">Estado <span class="obligatorio">*</span></label>
+                    <select id="editar-estado" name="estado">
+                        <option value="" disabled selected>Seleccionar</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="En progreso">En progreso</option>
+                        <option value="Completada">Completada</option>
+                    </select>
+                    <span class="error-msg" id="err-editar-estado">Selecciona un estado.</span>
+                </div>
+                <div class="form-group">
+                    <label for="editar-responsable">Responsable</label>
+                    <input type="text" id="editar-responsable" name="responsable" placeholder="Nombre del responsable" maxlength="100" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="editar-fecha">Fecha límite</label>
+                <input type="date" id="editar-fecha" name="fecha" />
+            </div>
+            <div class="form-botones">
+                <button type="button" class="btn-cancelar" onclick="limpiarFormEditar()">Cancelar</button>
+                <button type="submit" class="btn-crear">Guardar cambios</button>
+            </div>
+        </div>
+    </form>
+    <p id="msg-editar" class="msg-exito" style="display:none;">Tarea actualizada correctamente.</p>
+    <p id="msg-editar-error" class="msg-error" style="display:none;">No se encontró una tarea con ese ID.</p>
+</section>
+
+<!-- DELETE -->
+<section class="seccion" id="eliminar">
+    <h3>Eliminar tarea</h3>
+    <div class="form-group">
+        <label for="eliminar-id">ID de la tarea a eliminar <span class="obligatorio">*</span></label>
+        <div style="display:flex; gap:8px; align-items:center;">
+            <input type="number" id="eliminar-id" name="id" placeholder="Ej: 1" min="1" style="width:100px;" />
+            <button type="button" class="btn-eliminar" onclick="confirmarEliminacion()">Eliminar</button>
+        </div>
+        <span class="error-msg" id="err-eliminar-id" style="display:none;">Ingresa un ID válido.</span>
+    </div>
+
+    <!-- confirmacion -->
+    <div id="modal-eliminar" style="display:none;">
+        <div class="modal-overlay" onclick="cancelarEliminacion()"></div>
+        <div class="modal-box">
+            <h4>¿Eliminar esta tarea?</h4>
+            <p id="modal-tarea-info" class="modal-info"></p>
+            <p class="modal-advertencia">Esta acción no se puede deshacer.</p>
+            <div class="form-botones">
+                <button type="button" class="btn-cancelar" onclick="cancelarEliminacion()">Cancelar</button>
+                <button type="button" class="btn-eliminar-confirmar" onclick="ejecutarEliminacion()">Sí, eliminar</button>
+            </div>
+        </div>
+    </div>
+    <p id="msg-eliminar" class="msg-exito" style="display:none;">Tarea eliminada correctamente.</p>
+    <p id="msg-eliminar-error" class="msg-error" style="display:none;">No se encontró una tarea con ese ID.</p>
+</section>
 
     </main>
 
