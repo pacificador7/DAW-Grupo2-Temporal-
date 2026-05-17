@@ -114,6 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (limpiarFiltrosBtn) {
         limpiarFiltrosBtn.addEventListener('click', limpiarFiltros);
     }
+
+    inicializarTogglesFormularios();
 });
 
 
@@ -355,4 +357,45 @@ function ejecutarEliminacion() {
         msg.style.display = 'block';
         setTimeout(() => msg.style.display = 'none', 3000);
     }
+}
+
+function inicializarTogglesFormularios() {
+    const secciones = [
+        { sectionId: 'crear', label: 'Crear tarea' },
+        { sectionId: 'editar', label: 'Editar tarea' },
+        { sectionId: 'eliminar', label: 'Eliminar tarea' }
+    ];
+
+    secciones.forEach(({ sectionId, label }) => {
+        const section = document.getElementById(sectionId);
+        if (!section) return;
+
+        const primerElemento = section.querySelector('form, .form-group, #modal-eliminar');
+        if (!primerElemento) return;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'contenido-toggle';
+
+        const hijos = Array.from(section.children);
+        hijos.forEach((child, index) => {
+            if (index > 0) {
+                wrapper.appendChild(child);
+            }
+        });
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn-toggle';
+        btn.textContent = `Ocultar ${label}`;
+
+        section.appendChild(btn);
+        section.appendChild(wrapper);
+
+        let visible = true;
+        btn.addEventListener('click', () => {
+            visible = !visible;
+            wrapper.style.display = visible ? 'block' : 'none';
+            btn.textContent = visible ? `Ocultar ${label}` : `Mostrar ${label}`;
+        });
+    });
 }
