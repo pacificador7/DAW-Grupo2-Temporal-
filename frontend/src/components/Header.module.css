@@ -1,0 +1,121 @@
+/* ── Header container ─────────────────────────────────────────── */
+.header {
+  background: linear-gradient(135deg, #0563fa 0%, #0341c4 100%);
+  color: white;
+  box-shadow: 0 4px 20px rgba(5, 99, 250, 0.35);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.headerInner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* ── Brand ────────────────────────────────────────────────────── */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.brandTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+
+/* ── Navbar ───────────────────────────────────────────────────── */
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.navLink {
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+
+.navLink:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.navLinkActive {
+  background: white;
+  color: #0341c4;
+  font-weight: 700;
+}
+
+.navLinkActive:hover {
+  background: #e8f0ff;
+}
+
+/* ── Hamburger (mobile) ───────────────────────────────────────── */
+.menuToggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.bar {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: white;
+  border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s;
+}
+
+/* ── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .menuToggle {
+    display: flex;
+  }
+
+  .navbar {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #0563fa 0%, #0341c4 100%);
+    padding: 12px 24px 20px;
+    gap: 8px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+
+  .navOpen {
+    display: flex;
+  }
+
+  .navLink {
+    text-align: center;
+    padding: 12px;
+  }
+}
