@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Loader } from 'lucide-react';
 import Header from './components/Header.jsx';
-import TareasTable from './components/TareasTable.jsx'; // Añadido por Persona 3
+import TareasTable from './components/TareasTable.jsx';
 import EditarTarea from './components/EditarTarea.jsx';
 import EliminarTarea from './components/EliminarTarea.jsx';
 import './index.css';
