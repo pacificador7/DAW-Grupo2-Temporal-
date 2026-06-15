@@ -109,11 +109,14 @@ cd Gestion-de-Tareas-y-Proyectos
 ```bash
 docker-compose up --build
 ```
+<img width="1365" height="767" alt="image" src="https://github.com/user-attachments/assets/762feeb9-ab9b-442c-8a73-aab29bb4c1c8" />
+
 
 Este comando levanta los 3 servicios:
 - **PostgreSQL** en el puerto `5432`
 - **Backend** (Spring Boot) en el puerto `8080`
 - **Frontend** (React) en el puerto `5173`
+<img width="1365" height="767" alt="image" src="https://github.com/user-attachments/assets/f1960ddb-ab22-48c6-9969-111a51b2d0dc" />
 
 **3. Acceder a la aplicación**
 | Servicio | URL |
