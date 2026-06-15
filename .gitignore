@@ -35,12 +35,11 @@ spring.log
 logs/
 lombok.log
 
-# Environment & Secrets
-application.properties
-application.yml
-application-*.properties
-application-*.yml
-application-*.yaml
+# Environment & Secrets (solo overrides con credenciales, no el archivo base)
+application-local.properties
+application-local.yml
+application-secret*.properties
+application-secret*.yml
 bootstrap.properties
 bootstrap.yml
 .env
@@ -85,3 +84,11 @@ Dockerfile.user
 # Temporary
 tmp/
 temp/
+
+# Node / Frontend
+node_modules/
+dist/
+.vite/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
