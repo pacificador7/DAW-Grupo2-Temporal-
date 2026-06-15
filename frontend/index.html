@@ -1,64 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Aplicación de gestión de tareas y proyectos - DAW Laboratorio 1" />
     <title>Gestión de Tareas y Proyectos</title>
-
-    <link rel="stylesheet" href="styles.css">
-</head>
-
-<body>
-
-    <header class="header" id="inicio">
-        <h1>Gestión de Tareas y Proyectos</h1>
-
-        <nav class="navbar">
-            <a href="#inicio">Inicio</a>
-            <a href="tareas.html">Tareas</a>
-            <a href="#crear">Crear</a>
-            <a href="#editar">Editar</a>
-        </nav>
-    </header>
-
-    <main class="contenedor">
-
-        <!-- GET -->
-        <section class="seccion" id="tareas">
-            <h2>Listado de tareas</h2>
-            <table id="tareas-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Estado</th>
-                        <th>Fecha</th>
-                    </tr>
-                </thead>
-                <tbody id="tareas-body">
-                </tbody>
-            </table>
-        </section>
-
-        <!-- POST -->
-        <section class="seccion" id="crear">
-            <h3>Crear tarea</h3>
-        </section>
-
-        <!-- PUT -->
-        <section class="seccion" id="editar">
-            <h3>Editar tarea</h3>
-        </section>
-
-        <!-- DELETE -->
-        <section class="seccion" id="eliminar">
-            <h3>Eliminar tarea</h3>
-        </section>
-
-    </main>
-
-    <script src="app.js"></script>
-
-</body>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

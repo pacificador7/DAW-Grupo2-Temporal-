@@ -114,4 +114,288 @@ document.addEventListener('DOMContentLoaded', () => {
     if (limpiarFiltrosBtn) {
         limpiarFiltrosBtn.addEventListener('click', limpiarFiltros);
     }
+
+    inicializarTogglesFormularios();
 });
+
+
+//POST
+
+function limpiarFormCrear() {
+    const form = document.getElementById('form-crear');
+    if (!form) return;
+    form.reset();
+    // Quitar errores visuales
+    form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+    form.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+    document.getElementById('msg-crear').style.display = 'none';
+}
+
+function validarCampo(id, errId) {
+    const el = document.getElementById(id);
+    const err = document.getElementById(errId);
+    if (!el || !err) return true;
+    if (!el.value.trim()) {
+        el.classList.add('input-error');
+        err.style.display = 'block';
+        return false;
+    }
+    el.classList.remove('input-error');
+    err.style.display = 'none';
+    return true;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const formCrear = document.getElementById('form-crear');
+    if (!formCrear) return;
+
+    formCrear.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const camposValidos = [
+            validarCampo('crear-nombre',      'err-crear-nombre'),
+            validarCampo('crear-descripcion', 'err-crear-descripcion'),
+            validarCampo('crear-estado',      'err-crear-estado'),
+            validarCampo('crear-fecha',       'err-crear-fecha'),
+        ].every(Boolean);
+
+        if (!camposValidos) return;
+
+        // Convertir fecha de YYYY-MM-DD a DD-MM-YYYY (igual que el mock data)
+        const fechaRaw = document.getElementById('crear-fecha').value;
+        const [y, m, d] = fechaRaw.split('-');
+        const fechaFormateada = `${d}-${m}-${y}`;
+
+        // Crear objeto tarea nuevo
+        const nuevaTarea = {
+            id: mockTareas.length + 1,
+            nombre:      document.getElementById('crear-nombre').value.trim(),
+            descripcion: document.getElementById('crear-descripcion').value.trim(),
+            estado:      document.getElementById('crear-estado').value,
+            fecha:       fechaFormateada,
+        };
+
+        // Agregar al array y refrescar tabla
+        mockTareas.push(nuevaTarea);
+        cargarTareas();
+
+        // Mostrar mensaje de éxito y limpiar
+        limpiarFormCrear();
+        const msg = document.getElementById('msg-crear');
+        if (msg) {
+            msg.style.display = 'block';
+            setTimeout(() => msg.style.display = 'none', 3000);
+        }
+    });
+});
+
+
+// PUT
+
+let tareaEditandoId = null;
+
+function buscarTareaParaEditar() {
+    const idInput = document.getElementById('editar-id');
+    const id = parseInt(idInput?.value);
+    const errId = document.getElementById('err-editar-id');
+    const camposEditar = document.getElementById('campos-editar');
+    const msgError = document.getElementById('msg-editar-error');
+
+    // ocultar mensajes previos
+    if (msgError) msgError.style.display = 'none';
+    if (camposEditar) camposEditar.style.display = 'none';
+
+    if (!id || isNaN(id)) {
+        if (errId) errId.style.display = 'block';
+        return;
+    }
+    if (errId) errId.style.display = 'none';
+
+    const tarea = mockTareas.find(t => t.id === id);
+
+    if (!tarea) {
+        if (msgError) msgError.style.display = 'block';
+        return;
+    }
+
+    // rellenar campos con datos actuales de la tarea
+    document.getElementById('editar-nombre').value = tarea.nombre || tarea.titulo || '';
+    document.getElementById('editar-descripcion').value = tarea.descripcion || '';
+    document.getElementById('editar-estado').value = tarea.estado || '';
+    document.getElementById('editar-responsable').value = tarea.responsable || '';
+
+    // convertir fecha DD-MM-YYYY a YYYY-MM-DD para el input date
+    if (tarea.fecha) {
+        const partes = tarea.fecha.split('-');
+        if (partes.length === 3) {
+            document.getElementById('editar-fecha').value = `${partes[2]}-${partes[1]}-${partes[0]}`;
+        }
+    } else {
+        document.getElementById('editar-fecha').value = tarea.fechaLimite || '';
+    }
+
+    tareaEditandoId = id;
+    if (camposEditar) camposEditar.style.display = 'block';
+}
+
+function limpiarFormEditar() {
+    const form = document.getElementById('form-editar');
+    if (!form) return;
+    form.reset();
+    tareaEditandoId = null;
+    const camposEditar = document.getElementById('campos-editar');
+    if (camposEditar) camposEditar.style.display = 'none';
+    form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+    form.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+    const msg = document.getElementById('msg-editar');
+    const msgError = document.getElementById('msg-editar-error');
+    if (msg) msg.style.display = 'none';
+    if (msgError) msgError.style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const formEditar = document.getElementById('form-editar');
+    if (!formEditar) return;
+
+    formEditar.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const camposValidos = [
+            validarCampo('editar-nombre', 'err-editar-nombre'),
+            validarCampo('editar-estado', 'err-editar-estado'),
+        ].every(Boolean);
+
+        if (!camposValidos) return;
+
+        const index = mockTareas.findIndex(t => t.id === tareaEditandoId);
+        if (index === -1) return;
+
+        // convertir fecha YYYY-MM-DD a DD-MM-YYYY
+        const fechaRaw = document.getElementById('editar-fecha').value;
+        let fechaFormateada = '';
+        if (fechaRaw) {
+            const [y, m, d] = fechaRaw.split('-');
+            fechaFormateada = `${d}-${m}-${y}`;
+        }
+
+        // actualizar tarea en el array (simulacion PUT)
+        mockTareas[index] = {
+            ...mockTareas[index],
+            nombre:       document.getElementById('editar-nombre').value.trim(),
+            titulo:       document.getElementById('editar-nombre').value.trim(),
+            descripcion:  document.getElementById('editar-descripcion').value.trim(),
+            estado:       document.getElementById('editar-estado').value,
+            responsable:  document.getElementById('editar-responsable').value.trim(),
+            fecha:        fechaFormateada,
+            fechaLimite:  fechaRaw,
+        };
+
+        cargarTareas();
+        limpiarFormEditar();
+
+        const msg = document.getElementById('msg-editar');
+        if (msg) {
+            msg.style.display = 'block';
+            setTimeout(() => msg.style.display = 'none', 3000);
+        }
+    });
+});
+
+
+// DELETE
+let tareaEliminandoId = null;
+
+function confirmarEliminacion() {
+    const idInput = document.getElementById('eliminar-id');
+    const id = parseInt(idInput?.value);
+    const errId = document.getElementById('err-eliminar-id');
+    const msgError = document.getElementById('msg-eliminar-error');
+
+    if (msgError) msgError.style.display = 'none';
+
+    if (!id || isNaN(id)) {
+        if (errId) errId.style.display = 'block';
+        return;
+    }
+    if (errId) errId.style.display = 'none';
+
+    const tarea = mockTareas.find(t => t.id === id);
+
+    if (!tarea) {
+        if (msgError) msgError.style.display = 'block';
+        return;
+    }
+
+    tareaEliminandoId = id;
+
+    //mostrar info de la tarea
+    const infoEl = document.getElementById('modal-tarea-info');
+    if (infoEl) {
+        infoEl.textContent = `ID: ${tarea.id} — "${tarea.nombre || tarea.titulo}"`;
+    }
+
+    document.getElementById('modal-eliminar').style.display = 'block';
+}
+
+function cancelarEliminacion() {
+    tareaEliminandoId = null;
+    document.getElementById('modal-eliminar').style.display = 'none';
+}
+
+function ejecutarEliminacion() {
+    const index = mockTareas.findIndex(t => t.id === tareaEliminandoId);
+    if (index !== -1) {
+        mockTareas.splice(index, 1);
+        cargarTareas();
+    }
+
+    cancelarEliminacion();
+    document.getElementById('eliminar-id').value = '';
+
+    const msg = document.getElementById('msg-eliminar');
+    if (msg) {
+        msg.style.display = 'block';
+        setTimeout(() => msg.style.display = 'none', 3000);
+    }
+}
+
+function inicializarTogglesFormularios() {
+    const secciones = [
+        { sectionId: 'crear', label: 'Crear tarea' },
+        { sectionId: 'editar', label: 'Editar tarea' },
+        { sectionId: 'eliminar', label: 'Eliminar tarea' }
+    ];
+
+    secciones.forEach(({ sectionId, label }) => {
+        const section = document.getElementById(sectionId);
+        if (!section) return;
+
+        const primerElemento = section.querySelector('form, .form-group, #modal-eliminar');
+        if (!primerElemento) return;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'contenido-toggle';
+
+        const hijos = Array.from(section.children);
+        hijos.forEach((child, index) => {
+            if (index > 0) {
+                wrapper.appendChild(child);
+            }
+        });
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn-toggle';
+        btn.textContent = `Ocultar ${label}`;
+
+        section.appendChild(btn);
+        section.appendChild(wrapper);
+
+        let visible = true;
+        btn.addEventListener('click', () => {
+            visible = !visible;
+            wrapper.style.display = visible ? 'block' : 'none';
+            btn.textContent = visible ? `Ocultar ${label}` : `Mostrar ${label}`;
+        });
+    });
+}
