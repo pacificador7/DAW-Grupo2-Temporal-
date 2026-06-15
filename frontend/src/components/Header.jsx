@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ClipboardList } from 'lucide-react';
+import { ClipboardList, ListTodo, PlusCircle, Edit, Trash2 } from 'lucide-react';
 import styles from './Header.module.css';
 
 /**
@@ -11,10 +11,10 @@ const Header = ({ activeSection, onNavigate }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const navItems = [
-    { id: 'tareas',   label: 'Ver Tareas' },
-    { id: 'crear',    label: 'Crear Tarea' },
-    { id: 'editar',   label: 'Editar Tarea' },
-    { id: 'eliminar', label: 'Eliminar Tarea' },
+    { id: 'tareas',   label: 'Ver Tareas',     icon: <ListTodo size={16} /> },
+    { id: 'crear',    label: 'Crear Tarea',    icon: <PlusCircle size={16} /> },
+    { id: 'editar',   label: 'Editar Tarea',   icon: <Edit size={16} /> },
+    { id: 'eliminar', label: 'Eliminar Tarea', icon: <Trash2 size={16} /> },
   ];
 
   const handleNav = (id) => {
@@ -28,7 +28,7 @@ const Header = ({ activeSection, onNavigate }) => {
 
         {/* Logo / Título */}
         <div className={styles.brand}>
-          <ClipboardList size={22} strokeWidth={2} aria-hidden="true" />
+          <ClipboardList size={24} strokeWidth={2.5} aria-hidden="true" />
           <h1 className={styles.brandTitle}>Gestión de Tareas</h1>
         </div>
 
@@ -47,14 +47,15 @@ const Header = ({ activeSection, onNavigate }) => {
 
         {/* Navbar */}
         <nav className={`${styles.navbar} ${menuOpen ? styles.navOpen : ''}`}>
-          {navItems.map(({ id, label }) => (
+          {navItems.map(({ id, label, icon }) => (
             <button
               key={id}
               id={`nav-${id}`}
               className={`${styles.navLink} ${activeSection === id ? styles.navLinkActive : ''}`}
               onClick={() => handleNav(id)}
             >
-              {label}
+              {icon}
+              <span>{label}</span>
             </button>
           ))}
         </nav>

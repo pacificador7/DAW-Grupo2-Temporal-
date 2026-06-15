@@ -1,5 +1,14 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { getTareaById, deleteTarea } from '../api/tareasApi';
+import { 
+  Trash2, 
+  Search, 
+  AlertTriangle, 
+  CheckCircle, 
+  XCircle, 
+  Loader, 
+  Info 
+} from 'lucide-react';
 
 export default function EliminarTarea() {
   const [buscarId, setBuscarId]     = useState('');
@@ -10,7 +19,7 @@ export default function EliminarTarea() {
   const [error, setError]           = useState('');
   const [exito, setExito]           = useState('');
 
-  //buscar tarea para confirmar antes de eliminar "aqui se busca:"(GET /tareas/{id})
+  // Buscar tarea para confirmar antes de eliminar
   async function handleBuscar(e) {
     e.preventDefault();
     if (!buscarId) return;
@@ -26,16 +35,16 @@ export default function EliminarTarea() {
       setModal(true);
     } catch (err) {
       if (err.response?.status === 404) {
-        setError(`No se encontro ninguna tarea con ID ${buscarId}.`);
+        setError(`No se encontró ninguna tarea con ID ${buscarId}.`);
       } else {
-        setError('Error al conectar con el servidor. Verifica que el backend este corriendo.');
+        setError('Error al conectar con el servidor. Verifica que el backend esté corriendo.');
       }
     } finally {
       setCargando(false);
     }
   }
 
-  // confirmar eliminacion (DELETE /tareas/{id})
+  // Confirmar eliminación
   async function handleEliminar() {
     setEliminando(true);
     setError('');
@@ -54,7 +63,7 @@ export default function EliminarTarea() {
     }
   }
 
-  //cancelar
+  // Cancelar
   function handleCancelar() {
     setModal(false);
     setTarea(null);
@@ -64,13 +73,14 @@ export default function EliminarTarea() {
 
   return (
     <div className="form-card">
-      <h2 className="form-title">Eliminar tarea</h2>
+      <h2 className="form-title">
+        <Trash2 size={24} style={{ color: 'var(--color-danger)' }} />
+        <span>Eliminar Tarea</span>
+      </h2>
 
-
-      {/*dentro de react se ocupa {} para comentar, con // no funciona*/}
-      {/*buscador con ID*/}
-      <form onSubmit={handleBuscar} className="buscar-form">
-        <label htmlFor="eliminar-id" className="form-label">
+      {/* Buscador por ID */}
+      <form onSubmit={handleBuscar} className="buscar-form" style={{ marginTop: '24px' }}>
+        <label htmlFor="eliminar-id" className="form-label" style={{ fontWeight: '700', color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
           ID de la tarea a eliminar <span className="obligatorio">*</span>
         </label>
         <div className="buscar-row">
@@ -83,44 +93,84 @@ export default function EliminarTarea() {
             onChange={(e) => setBuscarId(e.target.value)}
             className="input-id"
             required
+            style={{ margin: 0 }}
           />
-          <button type="submit" className="btn-eliminar" disabled={cargando}>
-            {cargando ? 'Buscando...' : 'Eliminar'}
+          <button 
+            type="submit" 
+            className="btn-danger" 
+            disabled={cargando || !buscarId}
+          >
+            {cargando ? (
+              <>
+                <Loader size={16} className="animate-spin" />
+                <span>Buscando...</span>
+              </>
+            ) : (
+              <>
+                <Search size={16} />
+                <span>Buscar</span>
+              </>
+            )}
           </button>
         </div>
       </form>
 
-      {/*Mensajes*/}
-      {error && <p className="msg-error">{error}</p>}
-      {exito && <p className="msg-exito">✓ {exito}</p>}
+      {/* Mensajes de error o éxito */}
+      {error && (
+        <div className="msg-error">
+          <XCircle size={18} />
+          <span>{error}</span>
+        </div>
+      )}
+      
+      {exito && (
+        <div className="msg-exito">
+          <CheckCircle size={18} />
+          <span>{exito}</span>
+        </div>
+      )}
 
-      {/*Modal de confirmacion*/}
+      {/* Modal de confirmación */}
       {modalVisible && tarea && (
         <>
           <div className="modal-overlay" onClick={handleCancelar} />
           <div className="modal-box">
+            <div className="modal-icon-container">
+              <AlertTriangle size={24} />
+            </div>
             <h4 className="modal-titulo">¿Eliminar esta tarea?</h4>
-            <p className="modal-info">
-              ID: {tarea.id} — "{tarea.titulo}"
-            </p>
+            
+            <div className="modal-info">
+              ID: #{tarea.id} — "{tarea.titulo}"
+            </div>
+            
             <p className="modal-advertencia">
-              Esta acción no se puede deshacer.
+              Esta acción eliminará permanentemente la tarea del sistema. Esta acción no se puede deshacer.
             </p>
+            
             <div className="form-botones">
               <button
                 type="button"
-                className="btn-cancelar"
+                className="btn-secondary"
                 onClick={handleCancelar}
+                disabled={eliminando}
               >
                 Cancelar
               </button>
               <button
                 type="button"
-                className="btn-eliminar-confirmar"
+                className="btn-danger"
                 onClick={handleEliminar}
                 disabled={eliminando}
               >
-                {eliminando ? 'Eliminando...' : 'Sí, eliminar'}
+                {eliminando ? (
+                  <>
+                    <Loader size={16} className="animate-spin" />
+                    <span>Eliminando...</span>
+                  </>
+                ) : (
+                  <span>Sí, eliminar</span>
+                )}
               </button>
             </div>
           </div>
