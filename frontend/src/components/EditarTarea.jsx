@@ -31,7 +31,7 @@ export default function EditarTarea({ onTareaEditada }) {
         error.response?.status === 404
           ? `No se encontró la tarea con ID ${idBusqueda}.`
           : error.response?.data?.message || "Error al cargar la tarea.";
-      setMensaje({ tipo: "error", texto: `❌ ${detalle}` });
+      setMensaje({ tipo: "error", texto: `${detalle}` });
     } finally {
       setBuscando(false);
     }
@@ -48,12 +48,12 @@ export default function EditarTarea({ onTareaEditada }) {
 
     try {
       await axios.put(`/tareas/${idBusqueda}`, form);
-      setMensaje({ tipo: "exito", texto: "✅ Tarea actualizada correctamente." });
+      setMensaje({ tipo: "exito", texto: "Tarea actualizada correctamente." });
       if (onTareaEditada) onTareaEditada();
     } catch (error) {
       const detalle =
         error.response?.data?.message || "No se pudo actualizar la tarea.";
-      setMensaje({ tipo: "error", texto: `❌ Error: ${detalle}` });
+      setMensaje({ tipo: "error", texto: `Error: ${detalle}` });
     } finally {
       setCargando(false);
     }

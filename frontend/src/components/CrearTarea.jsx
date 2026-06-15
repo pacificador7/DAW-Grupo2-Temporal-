@@ -25,7 +25,7 @@ export default function CrearTarea({ onTareaCreada }) {
 
     try {
       await axios.post("/tareas", form);
-      setMensaje({ tipo: "exito", texto: "✅ Tarea creada exitosamente." });
+      setMensaje({ tipo: "exito", texto: "Tarea creada exitosamente." });
       setForm({
         titulo: "",
         descripcion: "",
@@ -37,7 +37,7 @@ export default function CrearTarea({ onTareaCreada }) {
     } catch (error) {
       const detalle =
         error.response?.data?.message || "No se pudo crear la tarea.";
-      setMensaje({ tipo: "error", texto: `❌ Error: ${detalle}` });
+      setMensaje({ tipo: "error", texto: `Error: ${detalle}` });
     } finally {
       setCargando(false);
     }
