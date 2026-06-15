@@ -1,121 +1,84 @@
-# Laboratorio 1 DAW - Gestion De Tareas Y Proyectos
+# Gestión de Tareas y Proyectos
 
-## Descripcion General
-Aplicacion web de gestion de tareas desarrollada por equipo, con backend en Spring Boot + PostgreSQL y frontend en HTML/CSS/JavaScript.
-
-Estado actual del proyecto:
-- Backend REST funcional con CRUD de tareas.
-- Conexion a PostgreSQL configurada.
-- Frontend estatico funcional.
-- Simulacion CRUD en frontend (en memoria) para pruebas de interfaz.
-- Mejoras responsive para desktop y logica de mostrar/ocultar formularios.
+## Descripción del Proyecto
+Sistema web para la gestión de tareas y proyectos que permite crear, listar, editar y eliminar tareas. Desarrollado con una arquitectura Cliente-Servidor desacoplada: el backend expone una API REST documentada con Swagger, el frontend consume esa API desde React, y todo el sistema se orquesta con Docker Compose.
 
 ## Integrantes
-- Ghilmer Eduardo De La Cruz Ventura - DV24003
-- Bryan Jose Moreno Villanueva - MV24050
-- Jose Fabricio Reyes Sermeno - RS24033
-- Juan Jose Recinos Murgas - RM24009
-- Alan Josue Menendez Hidalgo - MH23001
+| Nombre | Carnet |
+|--------|--------|
+| Ghilmer Eduardo De La Cruz Ventura | DV24003 |
+| Bryan Jose Moreno Villanueva | MV24050 |
+| Jose Fabricio Reyes Sermeno | RS24033 |
+| Juan Jose Recinos Murgas | RM24009 |
+| Alan Josue Menendez Hidalgo | MH23001 |
 
-## Estructura Del Proyecto
-```text
-Proyecto-Daw/
-|-- backend/        # API REST Spring Boot
-|-- frontend/       # Interfaz web (HTML/CSS/JS)
-|-- database/       # Script SQL base
-`-- README.md
-```
+## Repositorio
+[https://github.com/pacificador7/Gestion-de-Tareas-y-Proyectos](https://github.com/pacificador7/Gestion-de-Tareas-y-Proyectos)
 
-## Requerimientos
-### Backend
-- Java 21
-- Maven (incluye wrapper `mvnw`/`mvnw.cmd`)
-- PostgreSQL 14+ (recomendado)
+---
 
-### Frontend
-- Navegador moderno (Chrome, Edge, Firefox)
-- Opcional: servidor estatico local (Live Server, etc.)
+## Diagrama Entidad-Relación
+![Diagrama ER](database/Diagrama-ER.png)
 
-## Tecnologias Usadas
-- Spring Boot `3.5.13`
-- Spring Web
-- Spring Data JPA
-- PostgreSQL Driver
-- Lombok
-- OpenAPI/Swagger (`springdoc-openapi-starter-webmvc-ui:2.5.0`)
-- HTML5, CSS3, JavaScript (vanilla)
-
-## Configuracion De Base De Datos
-### 1. Crear base de datos
-Desde `psql`:
-```sql
-CREATE DATABASE tareas_db;
-```
-
-### 2. Script SQL (opcional)
-Archivo: `database/schema.sql`
+### Script SQL
 ```sql
 CREATE TABLE tareas (
     id           BIGSERIAL PRIMARY KEY,
     titulo       VARCHAR(150) NOT NULL,
     descripcion  TEXT,
-    estado       VARCHAR(20) NOT NULL DEFAULT 'PENDIENTE',
+    estado       VARCHAR(20)  NOT NULL DEFAULT 'PENDIENTE',
     responsable  VARCHAR(100),
     fecha_limite DATE
 );
 ```
 
-### 3. Configurar credenciales
-Archivo: `backend/src/main/resources/application.properties`
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/tareas_db
-spring.datasource.username=postgres
-spring.datasource.password=TU_PASSWORD
-spring.datasource.driver-class-name=org.postgresql.Driver
+---
 
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+## Estructura del Repositorio
+```
+Gestion-de-Tareas-y-Proyectos/
+├── backend/          # API REST con Spring Boot
+├── frontend/         # SPA desarrollada en React
+├── database/         # Script SQL y diagrama ER
+├── docker-compose.yml
+└── README.md
 ```
 
-Nota: si la contrasena no coincide con tu instalacion local, el backend falla con error de autenticacion de PostgreSQL.
+---
 
-## Como Ejecutar El Proyecto
-## 1) Backend
-En terminal:
-```bash
-cd backend
-./mvnw spring-boot:run
-```
-En Windows:
-```powershell
-cd backend
-.\mvnw.cmd spring-boot:run
-```
+## Tecnologías Utilizadas
+### Backend
+- Java 21
+- Spring Boot 3.5.13
+- Spring Web / Spring Data JPA
+- PostgreSQL Driver
+- Lombok
+- Springdoc OpenAPI / Swagger UI 2.5.0
 
-Backend disponible en:
-- `http://localhost:8080`
+### Frontend
+- React 18 (Vite)
+- Axios
+- JavaScript ES6+
 
-Importante:
-- La raiz `/` puede devolver `404` (Whitelabel) porque no existe vista en backend.
-- Endpoint principal actual: `/tareas`.
+### Base de Datos
+- PostgreSQL 14+
 
-## 2) Frontend
-Abrir directamente:
-- `frontend/index.html`
+### Despliegue
+- Docker
+- Docker Compose
 
-O servirlo con servidor local para mejor experiencia.
+---
 
-## API Actual (Backend)
-Controlador base: `/tareas`
+## API REST — Endpoints
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | `/tareas` | Listar todas las tareas |
+| GET | `/tareas/{id}` | Obtener tarea por ID |
+| POST | `/tareas` | Crear nueva tarea |
+| PUT | `/tareas/{id}` | Actualizar tarea existente |
+| DELETE | `/tareas/{id}` | Eliminar tarea |
 
-- `GET /tareas` -> listar tareas
-- `GET /tareas/{id}` -> obtener tarea por ID
-- `POST /tareas` -> crear tarea
-- `PUT /tareas/{id}` -> actualizar tarea
-- `DELETE /tareas/{id}` -> eliminar tarea
-
-### Ejemplo JSON para crear/actualizar
+### Ejemplo JSON
 ```json
 {
   "titulo": "Preparar entrega",
@@ -126,30 +89,75 @@ Controlador base: `/tareas`
 }
 ```
 
-## Swagger / Documentacion API
-Si el backend esta encendido, revisar:
-- `http://localhost:8080/swagger-ui/index.html`
+---
 
-## Avance Del Frontend Hasta Hoy
-Archivo principal: `frontend/index.html`
+## Manual de Despliegue con Docker
 
-### Funcionalidades implementadas
-- Renderizado de listado de tareas con datos mock.
-- Formulario de creacion con validaciones.
-- Formulario de edicion por ID con carga de datos.
-- Eliminacion por ID con modal de confirmacion.
-- Mensajes visuales de exito/error.
+### Requisitos previos
+- Tener instalado [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- Tener el repositorio clonado
 
-### Mejoras recientes (parte de Responsive Desktop + logica JS)
-- Media query desktop agregada para mejorar distribucion de secciones en pantallas grandes.
-- Botones dinamicos para mostrar/ocultar formularios de:
-  - Crear
-  - Editar
-  - Eliminar
-- CRUD simulado en memoria conectado a la tabla:
-  - Agregar
-  - Editar
-  - Eliminar
+### Pasos
+
+**1. Clonar el repositorio**
+```bash
+git clone https://github.com/pacificador7/Gestion-de-Tareas-y-Proyectos.git
+cd Gestion-de-Tareas-y-Proyectos
+```
+
+**2. Levantar todo el sistema con un solo comando**
+```bash
+docker-compose up --build
+```
+
+Este comando levanta los 3 servicios:
+- **PostgreSQL** en el puerto `5432`
+- **Backend** (Spring Boot) en el puerto `8080`
+- **Frontend** (React) en el puerto `5173`
+
+**3. Acceder a la aplicación**
+| Servicio | URL |
+|----------|-----|
+| Frontend | http://localhost:5173 |
+| Backend API | http://localhost:8080/tareas |
+| Swagger UI | http://localhost:8080/swagger-ui/index.html |
+
+**4. Detener el sistema**
+```bash
+docker-compose down
+```
+
+---
+
+## Ejecución sin Docker (desarrollo local)
+
+### Backend
+```bash
+cd backend
+mvn spring-boot:run
+```
+
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+## Evidencias de Funcionamiento
+
+### Swagger UI
+![Swagger UI](database/swagger.png)
+
+### Vistas de la aplicación
+![Listado de Tareas](database/vista-get.png)
+![Crear Tarea](database/vista-post.png)
+![Editar Tarea](database/vista-put.png)
+![Eliminar Tarea](database/vista-delete.png)
+
+---
 
 ## Licencia
-Uso academico para Laboratorio 1 - Desarrollo de Aplicaciones Web (DAW).
+Uso académico — Desarrollo de Aplicaciones Web (DAW), Universidad de El Salvador.
