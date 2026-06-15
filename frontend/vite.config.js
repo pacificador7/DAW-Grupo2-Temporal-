@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/tareas*': {
+      '/tareas': {
         target: 'http://localhost:8080',
         changeOrigin: true,
       }
