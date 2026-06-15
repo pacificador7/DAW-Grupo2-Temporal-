@@ -13,7 +13,7 @@ const api = axios.create({
 // ─── GET ──────────────────────────────────────────────────────────────────────
 
 /** Obtiene el listado completo de tareas */
-export const getTareas = () => api.get('/');
+export const getTareas = () => api.get('');
 
 /** Obtiene una tarea por su ID */
 export const getTareaById = (id) => api.get(`/${id}`);
