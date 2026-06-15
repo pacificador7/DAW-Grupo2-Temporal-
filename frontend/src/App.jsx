@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Loader } from 'lucide-react';
 import Header from './components/Header.jsx';
-import TareasTable from './components/TareasTable.jsx';
+import ListadoTareas from './components/ListadoTareas.jsx'; // Reemplazado TareasTable por ListadoTareas según especificación
 import EditarTarea from './components/EditarTarea.jsx';
 import EliminarTarea from './components/EliminarTarea.jsx';
 import './index.css';
-import CrearTarea from './components/CrearTarea.jsx';
 
 /**
  * Componente raíz de la aplicación.
@@ -22,15 +21,20 @@ function App() {
         {activeSection === 'tareas' && (
           <section className="seccion" id="tareas">
             <h2>Listado de Tareas</h2>
-            <TareasTable />
+            {/* Persona 3: Inyección del componente dinámico conectado a la API */}
+            <ListadoTareas />
           </section>
         )}
 
         {activeSection === 'crear' && (
-  <section className="seccion" id="crear">
-    <CrearTarea />
-  </section>
-)}
+          <section className="seccion" id="crear">
+            <h2>Crear Tarea</h2>
+            <p className="placeholder-msg">
+              <Loader size={16} strokeWidth={2} aria-hidden="true" />
+              Componente de formulario pendiente — Persona 4
+            </p>
+          </section>
+        )}
 
         {activeSection === 'editar' && (
           <section className="seccion" id="editar">

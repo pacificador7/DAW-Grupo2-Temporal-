@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getTareas } from '../api/tareasApi';
 import { Loader, AlertCircle, RefreshCw } from 'lucide-react';
 
-const TareasTable = () => {
+const ListadoTareas = () => {
   const [tareas, setTareas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -109,4 +109,4 @@ const TareasTable = () => {
   );
 };
 
-export default TareasTable;
+export default ListadoTareas;
