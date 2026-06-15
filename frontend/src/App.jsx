@@ -22,7 +22,6 @@ function App() {
         {activeSection === 'tareas' && (
           <section className="seccion" id="tareas">
             <h2>Listado de Tareas</h2>
-            {/* Persona 3: Inyección del componente dinámico conectado a la API */}
             <TareasTable />
           </section>
         )}
