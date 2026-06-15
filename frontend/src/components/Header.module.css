@@ -1,97 +1,121 @@
-/* ── Header container ─────────────────────────────────────────── */
+/* ── Header container (Classic solid school project style) ─────────── */
 .header {
-  background: linear-gradient(135deg, #0563fa 0%, #0341c4 100%);
+  background: #2c3e50; /* Azul Marino Oscuro sólido */
   color: white;
-  box-shadow: 0 4px 20px rgba(5, 99, 250, 0.35);
+  border-bottom: 2px solid #34495e;
   position: sticky;
   top: 0;
   z-index: 100;
 }
 
 .headerInner {
-  max-width: 1280px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
-  height: 64px;
+  padding: 0 16px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
 }
 
-/* ── Brand ────────────────────────────────────────────────────── */
+/* ── Brand / Logo ────────────────────────────────────────────────── */
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
+  gap: 8px;
+  color: white;
+  text-decoration: none;
+}
+
+.brand svg {
+  color: #3498db; /* Azul claro básico */
 }
 
 .brandTitle {
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  letter-spacing: -0.3px;
   white-space: nowrap;
+  color: white;
 }
 
-/* ── Navbar ───────────────────────────────────────────────────── */
+/* ── Navbar ──────────────────────────────────────────────────────── */
 .navbar {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
+  gap: 4px;
 }
 
 .navLink {
-  background: rgba(255, 255, 255, 0.12);
+  background: transparent;
   border: none;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  font-weight: 500;
+  color: #bdc3c7; /* Gris claro */
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: var(--font-family);
   cursor: pointer;
-  transition: background 0.2s, transform 0.15s;
+  transition: var(--transition-smooth);
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .navLink:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-1px);
+  color: white;
+  background: #34495e;
 }
 
 .navLinkActive {
-  background: white;
-  color: #0341c4;
+  background: #34495e !important;
+  color: white !important;
   font-weight: 700;
 }
 
-.navLinkActive:hover {
-  background: #e8f0ff;
-}
-
-/* ── Hamburger (mobile) ───────────────────────────────────────── */
+/* ── Hamburger Menu Button (mobile) ──────────────────────────────── */
 .menuToggle {
   display: none;
   flex-direction: column;
-  gap: 5px;
+  justify-content: space-between;
+  width: 18px;
+  height: 12px;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 0;
+  z-index: 101;
 }
 
 .bar {
   display: block;
-  width: 24px;
+  width: 18px;
   height: 2px;
   background: white;
-  border-radius: 2px;
-  transition: transform 0.25s, opacity 0.25s;
+  border-radius: 1px;
+  transition: transform 0.2s, opacity 0.2s;
 }
 
-/* ── Responsive ───────────────────────────────────────────────── */
-@media (max-width: 640px) {
+/* Hamburguesa abierta */
+.menuToggle[aria-expanded="true"] .bar:nth-child(1) {
+  transform: translateY(5px) rotate(45deg);
+}
+
+.menuToggle[aria-expanded="true"] .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menuToggle[aria-expanded="true"] .bar:nth-child(3) {
+  transform: translateY(-5px) rotate(-45deg);
+}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .headerInner {
+    padding: 0 12px;
+  }
+
   .menuToggle {
     display: flex;
   }
@@ -101,13 +125,13 @@
     flex-direction: column;
     align-items: stretch;
     position: absolute;
-    top: 64px;
+    top: 56px;
     left: 0;
     right: 0;
-    background: linear-gradient(135deg, #0563fa 0%, #0341c4 100%);
-    padding: 12px 24px 20px;
-    gap: 8px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    background: #2c3e50;
+    padding: 10px 12px 16px;
+    gap: 6px;
+    border-bottom: 2px solid #34495e;
   }
 
   .navOpen {
@@ -116,6 +140,8 @@
 
   .navLink {
     text-align: center;
-    padding: 12px;
+    justify-content: center;
+    padding: 10px;
+    font-size: 0.85rem;
   }
 }

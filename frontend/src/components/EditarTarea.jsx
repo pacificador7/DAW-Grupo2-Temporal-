@@ -1,23 +1,49 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { 
+  Edit, 
+  Search, 
+  Type, 
+  AlignLeft, 
+  Activity, 
+  User, 
+  Calendar, 
+  Save, 
+  X, 
+  CheckCircle, 
+  XCircle,
+  Loader
+} from "lucide-react";
 
 const estadosValidos = ["PENDIENTE", "EN_PROGRESO", "COMPLETADA"];
 
-export default function EditarTarea({ onTareaEditada }) {
+export default function EditarTarea({ selectedId, onTareaEditada }) {
   const [idBusqueda, setIdBusqueda] = useState("");
   const [form, setForm] = useState(null);
   const [mensaje, setMensaje] = useState(null);
   const [cargando, setCargando] = useState(false);
   const [buscando, setBuscando] = useState(false);
 
-  const cargarTarea = async () => {
-    if (!idBusqueda) return;
+  // Carga automática si el ID viene propiciado por el listado
+  useEffect(() => {
+    if (selectedId) {
+      setIdBusqueda(selectedId.toString());
+      cargarTareaDirecto(selectedId);
+    } else {
+      setForm(null);
+      setIdBusqueda("");
+      setMensaje(null);
+    }
+  }, [selectedId]);
+
+  const cargarTareaDirecto = async (id) => {
+    if (!id) return;
     setBuscando(true);
     setMensaje(null);
     setForm(null);
 
     try {
-      const res = await axios.get(`/tareas/${idBusqueda}`);
+      const res = await axios.get(`/tareas/${id}`);
       const tarea = res.data;
       setForm({
         titulo: tarea.titulo || "",
@@ -29,12 +55,17 @@ export default function EditarTarea({ onTareaEditada }) {
     } catch (error) {
       const detalle =
         error.response?.status === 404
-          ? `No se encontró la tarea con ID ${idBusqueda}.`
+          ? `No se encontró la tarea con ID ${id}.`
           : error.response?.data?.message || "Error al cargar la tarea.";
-      setMensaje({ tipo: "error", texto: `${detalle}` });
+      setMensaje({ tipo: "error", texto: detalle });
     } finally {
       setBuscando(false);
     }
+  };
+
+  const handleManualSearch = (e) => {
+    e.preventDefault();
+    cargarTareaDirecto(idBusqueda);
   };
 
   const handleChange = (e) => {
@@ -46,10 +77,16 @@ export default function EditarTarea({ onTareaEditada }) {
     setCargando(true);
     setMensaje(null);
 
+    const targetId = selectedId || idBusqueda;
+
     try {
-      await axios.put(`/tareas/${idBusqueda}`, form);
+      await axios.put(`/tareas/${targetId}`, form);
       setMensaje({ tipo: "exito", texto: "Tarea actualizada correctamente." });
-      if (onTareaEditada) onTareaEditada();
+      
+      // Esperar un momento antes de volver al listado
+      setTimeout(() => {
+        if (onTareaEditada) onTareaEditada();
+      }, 1500);
     } catch (error) {
       const detalle =
         error.response?.data?.message || "No se pudo actualizar la tarea.";
@@ -59,35 +96,87 @@ export default function EditarTarea({ onTareaEditada }) {
     }
   };
 
+  const handleCancelar = () => {
+    if (onTareaEditada) {
+      onTareaEditada();
+    } else {
+      setForm(null);
+      setIdBusqueda("");
+      setMensaje(null);
+    }
+  };
+
   return (
     <div className="card">
-      <h2>Editar Tarea</h2>
+      <h2>
+        <Edit size={24} style={{ color: "var(--color-primary)" }} />
+        <span>Editar Tarea</span>
+      </h2>
 
-      <div className="busqueda">
-        <label>ID de la tarea</label>
-        <div className="busqueda-fila">
-          <input
-            type="number"
-            min="1"
-            value={idBusqueda}
-            onChange={(e) => setIdBusqueda(e.target.value)}
-            placeholder="Ej: 3"
-          />
-          <button type="button" onClick={cargarTarea} disabled={buscando || !idBusqueda}>
-            {buscando ? "Buscando..." : "Cargar"}
-          </button>
+      {/* Buscador de ID manual, solo si no viene de una selección directa */}
+      {!selectedId && (
+        <form onSubmit={handleManualSearch} className="busqueda">
+          <label htmlFor="idBusqueda" style={{ fontWeight: '700', color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
+            Buscar Tarea por ID
+          </label>
+          <div className="busqueda-fila">
+            <input
+              id="idBusqueda"
+              type="number"
+              min="1"
+              value={idBusqueda}
+              onChange={(e) => setIdBusqueda(e.target.value)}
+              placeholder="Ej: 3"
+              required
+              style={{ margin: 0 }}
+            />
+            <button 
+              type="submit" 
+              className="btn-buscar" 
+              disabled={buscando || !idBusqueda}
+            >
+              {buscando ? (
+                <>
+                  <Loader size={16} className="animate-spin" />
+                  <span>Buscando...</span>
+                </>
+              ) : (
+                <>
+                  <Search size={16} />
+                  <span>Cargar Tarea</span>
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+      )}
+
+      {/* Cargando por ID directo */}
+      {selectedId && buscando && (
+        <div className="placeholder-msg">
+          <Loader size={20} className="animate-spin" />
+          <span>Cargando datos de la tarea #{selectedId}...</span>
         </div>
-      </div>
+      )}
 
       {mensaje && (
-        <p className={`mensaje ${mensaje.tipo}`}>{mensaje.texto}</p>
+        <div className={mensaje.tipo === "exito" ? "msg-exito" : "msg-error"}>
+          {mensaje.tipo === "exito" ? <CheckCircle size={18} /> : <XCircle size={18} />}
+          <span>{mensaje.texto}</span>
+        </div>
       )}
 
       {form && (
-        <form onSubmit={handleSubmit}>
-          <div className="campo">
-            <label>Título *</label>
+        <form onSubmit={handleSubmit} style={{ marginTop: "24px" }}>
+          
+          {/* Título */}
+          <div className="form-group">
+            <label htmlFor="edit-titulo">
+              <Type size={16} />
+              <span>Título de la tarea <span className="obligatorio">*</span></span>
+            </label>
             <input
+              id="edit-titulo"
               type="text"
               name="titulo"
               value={form.titulo}
@@ -97,9 +186,14 @@ export default function EditarTarea({ onTareaEditada }) {
             />
           </div>
 
-          <div className="campo">
-            <label>Descripción</label>
+          {/* Descripción */}
+          <div className="form-group">
+            <label htmlFor="edit-descripcion">
+              <AlignLeft size={16} />
+              <span>Descripción</span>
+            </label>
             <textarea
+              id="edit-descripcion"
               name="descripcion"
               value={form.descripcion}
               onChange={handleChange}
@@ -107,39 +201,92 @@ export default function EditarTarea({ onTareaEditada }) {
             />
           </div>
 
-          <div className="campo">
-            <label>Estado *</label>
-            <select name="estado" value={form.estado} onChange={handleChange} required>
-              {estadosValidos.map((e) => (
-                <option key={e} value={e}>{e}</option>
-              ))}
-            </select>
+          {/* Fila: Estado y Responsable */}
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="edit-estado">
+                <Activity size={16} />
+                <span>Estado <span className="obligatorio">*</span></span>
+              </label>
+              <select 
+                id="edit-estado"
+                name="estado" 
+                value={form.estado} 
+                onChange={handleChange} 
+                required
+              >
+                {estadosValidos.map((e) => (
+                  <option key={e} value={e}>
+                    {e.replace("_", " ")}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="edit-responsable">
+                <User size={16} />
+                <span>Responsable</span>
+              </label>
+              <input
+                id="edit-responsable"
+                type="text"
+                name="responsable"
+                value={form.responsable}
+                onChange={handleChange}
+                maxLength={100}
+              />
+            </div>
           </div>
 
-          <div className="campo">
-            <label>Responsable</label>
-            <input
-              type="text"
-              name="responsable"
-              value={form.responsable}
-              onChange={handleChange}
-              maxLength={100}
-            />
+          {/* Fecha Límite */}
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="edit-fechaLimite">
+                <Calendar size={16} />
+                <span>Fecha Límite</span>
+              </label>
+              <input
+                id="edit-fechaLimite"
+                type="date"
+                name="fechaLimite"
+                value={form.fechaLimite}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group" style={{ display: 'none' }}></div>
           </div>
 
-          <div className="campo">
-            <label>Fecha Límite</label>
-            <input
-              type="date"
-              name="fechaLimite"
-              value={form.fechaLimite}
-              onChange={handleChange}
-            />
+          {/* Botones de acción */}
+          <div className="form-botones">
+            <button 
+              type="button" 
+              className="btn-secondary" 
+              onClick={handleCancelar}
+              disabled={cargando}
+            >
+              <X size={16} />
+              <span>Cancelar</span>
+            </button>
+            
+            <button 
+              type="submit" 
+              className="btn-primary" 
+              disabled={cargando || !form.titulo}
+            >
+              {cargando ? (
+                <>
+                  <Loader size={16} className="animate-spin" />
+                  <span>Guardando...</span>
+                </>
+              ) : (
+                <>
+                  <Save size={16} />
+                  <span>Guardar Cambios</span>
+                </>
+              )}
+            </button>
           </div>
-
-          <button type="submit" disabled={cargando}>
-            {cargando ? "Guardando..." : "Guardar Cambios"}
-          </button>
         </form>
       )}
     </div>

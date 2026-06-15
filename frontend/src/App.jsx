@@ -1,44 +1,58 @@
 import React, { useState } from 'react';
-import { Loader } from 'lucide-react';
 import Header from './components/Header.jsx';
-import ListadoTareas from './components/ListadoTareas.jsx'; // Reemplazado TareasTable por ListadoTareas según especificación
+import ListadoTareas from './components/ListadoTareas.jsx';
+import CrearTarea from './components/CrearTarea.jsx';
 import EditarTarea from './components/EditarTarea.jsx';
 import EliminarTarea from './components/EliminarTarea.jsx';
 import './index.css';
 
 /**
  * Componente raíz de la aplicación.
- * Controla qué sección está activa y renderiza el Header.
+ * Controla qué sección está activa, maneja estados compartidos y renderiza el Header.
  */
 function App() {
   const [activeSection, setActiveSection] = useState('tareas');
+  const [selectedId, setSelectedId] = useState(null);
+
+  // Al navegar desde el Header, si van a 'editar' sin hacer clic en una tarea, limpiamos el ID seleccionado.
+  const handleNavigate = (section) => {
+    setActiveSection(section);
+    if (section !== 'editar') {
+      setSelectedId(null);
+    }
+  };
+
+  const handleEditClick = (id) => {
+    setSelectedId(id);
+    setActiveSection('editar');
+  };
 
   return (
     <div className="app">
-      <Header activeSection={activeSection} onNavigate={setActiveSection} />
+      <Header activeSection={activeSection} onNavigate={handleNavigate} />
 
       <main className="main-content">
         {activeSection === 'tareas' && (
           <section className="seccion" id="tareas">
-            <h2>Listado de Tareas</h2>
-            {/* Persona 3: Inyección del componente dinámico conectado a la API */}
-            <ListadoTareas />
+            <ListadoTareas onEditTarea={handleEditClick} />
           </section>
         )}
 
         {activeSection === 'crear' && (
           <section className="seccion" id="crear">
-            <h2>Crear Tarea</h2>
-            <p className="placeholder-msg">
-              <Loader size={16} strokeWidth={2} aria-hidden="true" />
-              Componente de formulario pendiente — Persona 4
-            </p>
+            <CrearTarea onTareaCreada={() => setActiveSection('tareas')} />
           </section>
         )}
 
         {activeSection === 'editar' && (
           <section className="seccion" id="editar">
-            <EditarTarea />
+            <EditarTarea 
+              selectedId={selectedId} 
+              onTareaEditada={() => {
+                setSelectedId(null);
+                setActiveSection('tareas');
+              }} 
+            />
           </section>
         )}
 
