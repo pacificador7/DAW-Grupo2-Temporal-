@@ -5,6 +5,7 @@ import TareasTable from './components/TareasTable.jsx'; // Añadido por Persona 
 import EditarTarea from './components/EditarTarea.jsx';
 import EliminarTarea from './components/EliminarTarea.jsx';
 import './index.css';
+import CrearTarea from './components/CrearTarea.jsx';
 
 /**
  * Componente raíz de la aplicación.
@@ -27,14 +28,10 @@ function App() {
         )}
 
         {activeSection === 'crear' && (
-          <section className="seccion" id="crear">
-            <h2>Crear Tarea</h2>
-            <p className="placeholder-msg">
-              <Loader size={16} strokeWidth={2} aria-hidden="true" />
-              Componente de formulario pendiente — Persona 4
-            </p>
-          </section>
-        )}
+  <section className="seccion" id="crear">
+    <CrearTarea />
+  </section>
+)}
 
         {activeSection === 'editar' && (
           <section className="seccion" id="editar">
