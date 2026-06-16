@@ -155,10 +155,19 @@ npm run dev
 ![Swagger UI](database/swagger.png)
 
 ### Vistas de la aplicación
-![Listado de Tareas](database/vista-get.png)
-![Crear Tarea](database/vista-post.png)
-![Editar Tarea](database/vista-put.png)
-![Eliminar Tarea](database/vista-delete.png)
+<img width="1913" height="941" alt="image" src="https://github.com/user-attachments/assets/ec8dbf00-524e-44f9-aeb0-a7eef443a29f" />
+<img width="1917" height="940" alt="image" src="https://github.com/user-attachments/assets/2c3945ff-9792-491f-ae17-f027ed4be879" />
+<img width="1915" height="938" alt="image" src="https://github.com/user-attachments/assets/5776132f-964e-48e1-80df-a794c2e4eda9" />
+<img width="1914" height="945" alt="image" src="https://github.com/user-attachments/assets/5a332e37-73d2-4a3f-9a3a-7d049d6c8c7e" />
+<img width="1911" height="668" alt="image" src="https://github.com/user-attachments/assets/a9648de6-fc9b-4c1a-b746-4368524428c1" />
+<img width="1919" height="930" alt="image" src="https://github.com/user-attachments/assets/7e629bc4-d7b7-4b86-8355-c63dfbea6b9e" />
+<img width="1918" height="938" alt="image" src="https://github.com/user-attachments/assets/ce3d55de-7e4d-4cb9-a435-83749d5ff674" />
+<img width="1919" height="925" alt="image" src="https://github.com/user-attachments/assets/1154ac85-00a8-40a6-ba98-bb6fda0109cc" />
+<img width="1916" height="940" alt="image" src="https://github.com/user-attachments/assets/4179407f-0837-4b8b-99dd-93b10f7bb6ef" />
+<img width="1915" height="941" alt="image" src="https://github.com/user-attachments/assets/8b062bdf-4fb7-4128-84c2-ba1f36511302" />
+
+
+
 
 ---
 
