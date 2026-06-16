@@ -107,8 +107,8 @@ export default function EditarTarea({ selectedId, onTareaEditada }) {
   };
 
   return (
-    <div className="card">
-      <h2>
+    <div className="form-container">
+      <h2 className="form-title">
         <Edit size={24} style={{ color: "var(--color-primary)" }} />
         <span>Editar Tarea</span>
       </h2>
