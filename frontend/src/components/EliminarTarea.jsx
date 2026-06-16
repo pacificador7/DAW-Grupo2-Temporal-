@@ -72,7 +72,7 @@ export default function EliminarTarea() {
   }
 
   return (
-    <div className="form-card">
+    <div className="form-container">
       <h2 className="form-title">
         <Trash2 size={24} style={{ color: 'var(--color-danger)' }} />
         <span>Eliminar Tarea</span>

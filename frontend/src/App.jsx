@@ -8,13 +8,12 @@ import './index.css';
 
 /**
  * Componente raíz de la aplicación.
- * Controla qué sección está activa, maneja estados compartidos y renderiza el Header.
+ * Diseño minimalista "Split View": Lista a la izquierda, formularios a la derecha.
  */
 function App() {
   const [activeSection, setActiveSection] = useState('tareas');
   const [selectedId, setSelectedId] = useState(null);
 
-  // Al navegar desde el Header, si van a 'editar' sin hacer clic en una tarea, limpiamos el ID seleccionado.
   const handleNavigate = (section) => {
     setActiveSection(section);
     if (section !== 'editar') {
@@ -32,35 +31,37 @@ function App() {
       <Header activeSection={activeSection} onNavigate={handleNavigate} />
 
       <main className="main-content">
-        {activeSection === 'tareas' && (
-          <section className="seccion" id="tareas">
-            <ListadoTareas onEditTarea={handleEditClick} />
-          </section>
-        )}
+        {/* Área Central: Siempre visible el listado y tablero */}
+        <section className="center-area" id="tareas-area">
+          <ListadoTareas onEditTarea={handleEditClick} />
+        </section>
 
-        {activeSection === 'crear' && (
-          <section className="seccion" id="crear">
-            <CrearTarea onTareaCreada={() => setActiveSection('tareas')} />
-          </section>
-        )}
+        {/* Panel Lateral: Cambia dinámicamente el formulario según la navegación */}
+        <section className="side-panel">
+          {(activeSection === 'tareas' || activeSection === 'crear') && (
+            <div className="seccion" id="crear">
+              <CrearTarea onTareaCreada={() => setActiveSection('tareas')} />
+            </div>
+          )}
 
-        {activeSection === 'editar' && (
-          <section className="seccion" id="editar">
-            <EditarTarea 
-              selectedId={selectedId} 
-              onTareaEditada={() => {
-                setSelectedId(null);
-                setActiveSection('tareas');
-              }} 
-            />
-          </section>
-        )}
+          {activeSection === 'editar' && (
+            <div className="seccion" id="editar">
+              <EditarTarea 
+                selectedId={selectedId} 
+                onTareaEditada={() => {
+                  setSelectedId(null);
+                  setActiveSection('tareas');
+                }} 
+              />
+            </div>
+          )}
 
-        {activeSection === 'eliminar' && (
-          <section className="seccion" id="eliminar">
-            <EliminarTarea />
-          </section>
-        )}
+          {activeSection === 'eliminar' && (
+            <div className="seccion" id="eliminar">
+              <EliminarTarea />
+            </div>
+          )}
+        </section>
       </main>
     </div>
   );

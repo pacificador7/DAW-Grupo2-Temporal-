@@ -10,7 +10,8 @@ import {
   Trash2, 
   Calendar, 
   ListTodo,
-  LayoutGrid
+  LayoutGrid,
+  AlertTriangle
 } from 'lucide-react';
 
 const ListadoTareas = ({ onEditTarea }) => {
@@ -166,59 +167,45 @@ const ListadoTareas = ({ onEditTarea }) => {
             className={`view-toggle-btn ${viewMode === 'lista' ? 'active' : ''}`}
             onClick={() => setViewMode('lista')}
           >
-            <ListTodo size={12} />
-            <span>Lista</span>
+            Lista
           </button>
           <button 
             className={`view-toggle-btn ${viewMode === 'tablero' ? 'active' : ''}`}
             onClick={() => setViewMode('tablero')}
           >
-            <LayoutGrid size={12} />
-            <span>Tablero</span>
+            Tablero
           </button>
         </div>
       </div>
 
-      {/* Cintillo de Resumen Simplificado (Aesthetic Estudiante) */}
+      {/* Cintillo de Resumen Simplificado (KPIs de texto plano) */}
       <div className="stats-summary-bar">
         <div 
           className={`stats-summary-item ${statusFilter === 'TODOS' && viewMode === 'lista' ? 'active' : ''}`}
           onClick={() => { setViewMode('lista'); setStatusFilter('TODOS'); }}
-          title="Ver tareas activas en lista"
         >
-          <span>Tareas Activas</span>
-          <span className="stats-summary-count">{pendientes + enProgreso}</span>
+          Tareas Activas <span className="stats-summary-count">{pendientes + enProgreso}</span>
         </div>
-
         <div 
           className={`stats-summary-item ${statusFilter === 'PENDIENTE' && viewMode === 'lista' ? 'active' : ''}`}
           onClick={() => { setViewMode('lista'); setStatusFilter('PENDIENTE'); }}
-          title="Filtrar por Pendientes"
         >
-          <span>Pendientes</span>
-          <span className="stats-summary-count">{pendientes}</span>
+          Pendientes <span className="stats-summary-count">{pendientes}</span>
         </div>
-
         <div 
           className={`stats-summary-item ${statusFilter === 'EN_PROGRESO' && viewMode === 'lista' ? 'active' : ''}`}
           onClick={() => { setViewMode('lista'); setStatusFilter('EN_PROGRESO'); }}
-          title="Filtrar por En Curso"
         >
-          <span>En Curso</span>
-          <span className="stats-summary-count">{enProgreso}</span>
+          En Curso <span className="stats-summary-count">{enProgreso}</span>
         </div>
-
         <div 
           className={`stats-summary-item ${statusFilter === 'COMPLETADA' && viewMode === 'lista' ? 'active' : ''}`}
           onClick={() => { setViewMode('lista'); setStatusFilter('COMPLETADA'); }}
-          title="Filtrar por Completadas"
         >
-          <span>Completadas</span>
-          <span className="stats-summary-count">{completadas}</span>
+          Completadas <span className="stats-summary-count">{completadas}</span>
         </div>
-
         <div className="stats-summary-item" style={{ cursor: 'default' }}>
-          <span>Progreso General: {porcentajeProgreso}%</span>
+          Progreso General: <span className="stats-summary-count">{porcentajeProgreso}%</span>
         </div>
       </div>
 

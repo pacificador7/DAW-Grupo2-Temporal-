@@ -69,8 +69,8 @@ export default function CrearTarea({ onTareaCreada }) {
   };
 
   return (
-    <div className="card">
-      <h2>
+    <div className="form-container">
+      <h2 className="form-title">
         <PlusCircle size={24} style={{ color: "var(--color-primary)" }} />
         <span>Crear Tarea</span>
       </h2>
