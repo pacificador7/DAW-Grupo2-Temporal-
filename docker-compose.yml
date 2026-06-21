@@ -54,14 +54,14 @@ services:
     ports:
       - "8080:8080"               # Permite acceder al backend directamente (ej: Swagger)
 
-    # BUG #11 fix: healthcheck para que el frontend espere a que el backend
-    # este listo antes de arrancar (no solo que el proceso haya iniciado)
+    # Healthcheck: wget viene incluido en Alpine (curl NO esta disponible en eclipse-temurin:jre-alpine)
+    # start_period le da tiempo a Spring Boot para arrancar antes de contar fallos
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q '\"status\":\"UP\"' || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 5
-      start_period: 30s
+      retries: 10
+      start_period: 60s
 
     networks:
       - app-network
