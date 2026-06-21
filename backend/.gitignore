@@ -33,3 +33,7 @@ build/
 .vscode/
 node_modules/
 
+### Configuracion local de cada desarrollador (NO subir a Git) ###
+application-local.properties
+src/main/resources/application-local.properties
+.env
