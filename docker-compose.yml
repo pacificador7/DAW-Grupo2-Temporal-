@@ -1,8 +1,8 @@
 services:
 
-  # =============================================
+
   # SERVICIO 1: Base de datos PostgreSQL
-  # =============================================
+
   db:
     image: postgres:16            # Imagen oficial de PostgreSQL version 16
     container_name: postgres_db
@@ -31,9 +31,9 @@ services:
     networks:
       - app-network
 
-  # =============================================
+
   # SERVICIO 2: Backend Spring Boot
-  # =============================================
+
   backend:
     build:
       context: ./backend          # Carpeta donde esta el Dockerfile del backend
@@ -57,9 +57,8 @@ services:
     networks:
       - app-network
 
-  # =============================================
   # SERVICIO 3: Frontend React + nginx
-  # =============================================
+
   frontend:
     build:
       context: ./frontend         # Carpeta donde esta el Dockerfile del frontend
@@ -76,19 +75,19 @@ services:
     networks:
       - app-network
 
-# =============================================
+
 # VOLUMENES: almacenamiento persistente
 # Docker gestiona esta carpeta fuera de los contenedores
-# =============================================
+
 volumes:
   postgres_data:
     driver: local
 
-# =============================================
+
 # REDES: red interna privada para los servicios
 # Los servicios se comunican por nombre (db, backend, frontend)
 # Esta red es invisible desde fuera
-# =============================================
+
 networks:
   app-network:
     driver: bridge

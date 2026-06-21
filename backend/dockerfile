@@ -1,8 +1,7 @@
-# =============================================
 # ETAPA 1: "builder"
 # Imagen con JDK completo para compilar el proyecto
 # Esta etapa NO forma parte de la imagen final
-# =============================================
+
 FROM eclipse-temurin:21-jdk AS builder
 
 # Directorio de trabajo dentro del contenedor
@@ -23,11 +22,9 @@ COPY src ./src
 # Compilamos el proyecto y generamos el JAR (omitimos tests para Docker)
 RUN ./mvnw clean package -DskipTests -q
 
-# =============================================
 # ETAPA 2: imagen final
 # Solo necesita el JRE (Java Runtime Environment)
 # Es mucho mas liviana que el JDK
-# =============================================
 FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
