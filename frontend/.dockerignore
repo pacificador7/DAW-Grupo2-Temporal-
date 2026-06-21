@@ -1,0 +1,12 @@
+# Ignorar node_modules — Docker los instala dentro del contenedor
+# Si se copian los de Windows, los binarios no funcionan en Linux
+node_modules
+
+# Ignorar el build anterior — Docker lo genera desde cero
+dist
+
+# Ignorar archivos que no necesita el contenedor
+.git
+.gitignore
+.gitkeep
+*.md

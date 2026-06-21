@@ -1,13 +1,43 @@
-FROM eclipse-temurin:21-jdk
+# =============================================
+# ETAPA 1: "builder"
+# Imagen con JDK completo para compilar el proyecto
+# Esta etapa NO forma parte de la imagen final
+# =============================================
+FROM eclipse-temurin:21-jdk AS builder
+
+# Directorio de trabajo dentro del contenedor
+WORKDIR /app
+
+# Copiamos primero solo los archivos de dependencias (pom.xml y mvnw).
+# Docker cachea capas: si pom.xml no cambia, no re-descarga dependencias.
+COPY pom.xml .
+COPY mvnw .
+COPY .mvn .mvn
+
+# Descargamos las dependencias en una capa separada (optimizacion de cache)
+RUN chmod +x mvnw && ./mvnw dependency:go-offline -q
+
+# Ahora copiamos el codigo fuente
+COPY src ./src
+
+# Compilamos el proyecto y generamos el JAR (omitimos tests para Docker)
+RUN ./mvnw clean package -DskipTests -q
+
+# =============================================
+# ETAPA 2: imagen final
+# Solo necesita el JRE (Java Runtime Environment)
+# Es mucho mas liviana que el JDK
+# =============================================
+FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
-COPY . .
+# Copiamos SOLO el JAR generado en la etapa anterior
+# El resto (codigo fuente, JDK, Maven) queda descartado
+COPY --from=builder /app/target/gestion-tareas-0.0.1-SNAPSHOT.jar app.jar
 
-RUN chmod +x mvnw
-
-RUN ./mvnw clean package -DskipTests
-
+# Puerto que expone la aplicacion Spring Boot
 EXPOSE 8080
 
-CMD ["java","-jar","target/gestion-tareas-0.0.1-SNAPSHOT.jar"]
+# Comando de arranque
+CMD ["java", "-jar", "app.jar"]

@@ -1,0 +1,12 @@
+# Ignorar los compilados locales — Docker compila desde cero con Maven
+target
+
+# Ignorar archivos que no necesita el contenedor
+.git
+.gitignore
+.gitkeep
+*.md
+
+# Ignorar configuracion del IDE
+.idea
+*.iml

@@ -1,28 +1,94 @@
 services:
 
+  # =============================================
+  # SERVICIO 1: Base de datos PostgreSQL
+  # =============================================
   db:
-    image: postgres:16
+    image: postgres:16            # Imagen oficial de PostgreSQL version 16
     container_name: postgres_db
-    restart: always
+    restart: always               # Si el contenedor falla, se reinicia automaticamente
+
     environment:
-      POSTGRES_DB: tareas_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: tareas_db      # Nombre de la base de datos que se crea al iniciar
+      POSTGRES_USER: postgres     # Usuario administrador
+      POSTGRES_PASSWORD: postgres # Contrasena (misma que usara el backend)
 
+    ports:
+      - "5432:5432"               # host:contenedor — permite conectarse desde DBeaver/pgAdmin local
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persiste los datos aunque se baje el contenedor
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql  # Ejecuta el schema al iniciar
+
+    # Healthcheck: Docker verifica cada 5s si Postgres acepta conexiones
+    # El backend no arrancara hasta que esto devuelva "healthy"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tareas_db"]
+      interval: 5s      # Verificar cada 5 segundos
+      timeout: 5s       # Esperar maximo 5s por respuesta
+      retries: 5        # Si falla 5 veces seguidas, el servicio es "unhealthy"
+
+    networks:
+      - app-network
+
+  # =============================================
+  # SERVICIO 2: Backend Spring Boot
+  # =============================================
   backend:
-    build: ./backend
+    build:
+      context: ./backend          # Carpeta donde esta el Dockerfile del backend
+      dockerfile: dockerfile
     container_name: spring_backend
-    depends_on:
-      - db
-    ports:
-      - "8080:8080"
+    restart: always
 
-  frontend:
-    build: ./frontend
-    container_name: frontend_web
     depends_on:
-      - backend
+      db:
+        condition: service_healthy  # Espera a que la BD este lista (no solo arrancada)
+
+    environment:
+      DB_HOST: db                 # "db" es el nombre del servicio de arriba
+      DB_NAME: tareas_db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+
     ports:
-      - "80:80"
+      - "8080:8080"               # Permite acceder al backend directamente (ej: Swagger)
+
+    networks:
+      - app-network
+
+  # =============================================
+  # SERVICIO 3: Frontend React + nginx
+  # =============================================
+  frontend:
+    build:
+      context: ./frontend         # Carpeta donde esta el Dockerfile del frontend
+      dockerfile: dockerfile
+    container_name: frontend_web
+    restart: always
+
+    depends_on:
+      - backend                   # Espera a que el backend este arrancado
+
+    ports:
+      - "80:80"                   # La app estara disponible en http://localhost
+
+    networks:
+      - app-network
+
+# =============================================
+# VOLUMENES: almacenamiento persistente
+# Docker gestiona esta carpeta fuera de los contenedores
+# =============================================
+volumes:
+  postgres_data:
+    driver: local
+
+# =============================================
+# REDES: red interna privada para los servicios
+# Los servicios se comunican por nombre (db, backend, frontend)
+# Esta red es invisible desde fuera
+# =============================================
+networks:
+  app-network:
+    driver: bridge

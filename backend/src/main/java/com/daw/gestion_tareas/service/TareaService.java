@@ -26,10 +26,10 @@ public class TareaService {
         return dto;
     }
 
-    // DTO a Entity
+    // DTO a Entity (para creacion — el id lo genera la BD, no el cliente)
     public Tarea toEntity(TareaDTO dto) {
         Tarea tarea = new Tarea();
-        tarea.setId(dto.getId());
+        // NO se asigna el id: la BD lo genera automaticamente con BIGSERIAL
         tarea.setTitulo(dto.getTitulo());
         tarea.setDescripcion(dto.getDescripcion());
         tarea.setEstado(dto.getEstado());
