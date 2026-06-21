@@ -2,6 +2,7 @@ package com.daw.gestion_tareas.service;
 
 import com.daw.gestion_tareas.model.Tarea;
 import com.daw.gestion_tareas.dto.TareaDTO;
+import com.daw.gestion_tareas.exception.ResourceNotFoundException;
 import com.daw.gestion_tareas.repository.TareaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,7 @@ public class TareaService {
 
     public TareaDTO obtenerPorId(Long id) {
         Tarea tarea = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Tarea no encontrada con ID: " + id));
         return toDTO(tarea);
     }
 
@@ -60,7 +61,7 @@ public class TareaService {
 
     public TareaDTO actualizar(Long id, TareaDTO dto) {
         Tarea tarea = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tarea no encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Tarea no encontrada con ID: " + id));
 
         tarea.setTitulo(dto.getTitulo());
         tarea.setDescripcion(dto.getDescripcion());

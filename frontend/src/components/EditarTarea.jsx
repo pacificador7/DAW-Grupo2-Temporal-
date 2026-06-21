@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { getTareaById, updateTarea } from "../api/tareasApi";
 import { 
   Edit, 
   Search, 
@@ -43,7 +43,7 @@ export default function EditarTarea({ selectedId, onTareaEditada }) {
     setForm(null);
 
     try {
-      const res = await axios.get(`/tareas/${id}`);
+      const res = await getTareaById(id);
       const tarea = res.data;
       setForm({
         titulo: tarea.titulo || "",
@@ -80,7 +80,7 @@ export default function EditarTarea({ selectedId, onTareaEditada }) {
     const targetId = selectedId || idBusqueda;
 
     try {
-      await axios.put(`/tareas/${targetId}`, form);
+      await updateTarea(targetId, form);
       setMensaje({ tipo: "exito", texto: "Tarea actualizada correctamente." });
       
       // Esperar un momento antes de volver al listado
@@ -217,7 +217,7 @@ export default function EditarTarea({ selectedId, onTareaEditada }) {
               >
                 {estadosValidos.map((e) => (
                   <option key={e} value={e}>
-                    {e.replace("_", " ")}
+                    {e.replaceAll("_", " ")}
                   </option>
                 ))}
               </select>

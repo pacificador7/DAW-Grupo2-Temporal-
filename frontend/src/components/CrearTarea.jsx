@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { createTarea } from "../api/tareasApi";
 import { 
   Type, 
   AlignLeft, 
@@ -46,7 +46,7 @@ export default function CrearTarea({ onTareaCreada }) {
     setMensaje(null);
 
     try {
-      await axios.post("/tareas", form);
+      await createTarea(form);
       setMensaje({ tipo: "exito", texto: "Tarea creada exitosamente." });
       setForm({
         titulo: "",
@@ -134,7 +134,7 @@ export default function CrearTarea({ onTareaCreada }) {
             >
               {estadosValidos.map((e) => (
                 <option key={e} value={e}>
-                  {e.replace("_", " ")}
+                  {e.replaceAll("_", " ")}
                 </option>
               ))}
             </select>

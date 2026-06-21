@@ -14,7 +14,7 @@ import {
   AlertTriangle
 } from 'lucide-react';
 
-const ListadoTareas = ({ onEditTarea }) => {
+const ListadoTareas = ({ onEditTarea, onRegisterRefresh }) => {
   const [tareas, setTareas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -48,6 +48,14 @@ const ListadoTareas = ({ onEditTarea }) => {
     cargarTareas();
   }, []);
 
+  // BUG #10 fix: registrar la función de recarga para que App.jsx pueda llamarla
+  // desde EliminarTarea (que está en el panel lateral)
+  useEffect(() => {
+    if (onRegisterRefresh) {
+      onRegisterRefresh(cargarTareas);
+    }
+  }, [onRegisterRefresh]);
+
   const abrirModalEliminar = (tarea) => {
     setTareaAEliminar(tarea);
   };
@@ -61,7 +69,8 @@ const ListadoTareas = ({ onEditTarea }) => {
     setEliminando(true);
     try {
       await deleteTarea(tareaAEliminar.id);
-      setTareas(tareas.filter(t => t.id !== tareaAEliminar.id));
+      // BUG #8 fix: usar forma funcional para evitar stale closure
+      setTareas(prev => prev.filter(t => t.id !== tareaAEliminar.id));
       setTareaAEliminar(null);
     } catch (err) {
       console.error("Error al eliminar la tarea:", err);
@@ -75,8 +84,8 @@ const ListadoTareas = ({ onEditTarea }) => {
     const tareaOriginal = tareas.find(t => t.id === id);
     if (!tareaOriginal) return;
 
-    // Actualización local rápida
-    setTareas(tareas.map(t => t.id === id ? { ...t, estado: nuevoEstado } : t));
+    // BUG #7 fix: usar forma funcional para evitar stale closure
+    setTareas(prev => prev.map(t => t.id === id ? { ...t, estado: nuevoEstado } : t));
 
     try {
       await updateTarea(id, {
@@ -88,11 +97,17 @@ const ListadoTareas = ({ onEditTarea }) => {
       });
     } catch (err) {
       console.error("Error al actualizar el estado de la tarea:", err);
+      // Revertir el cambio optimista si falla
+      setTareas(prev => prev.map(t => t.id === id ? { ...t, estado: tareaOriginal.estado } : t));
       alert("No se pudo guardar el cambio en el servidor.");
     } finally {
-      // Recargar tareas para asegurar que todo cuadre
-      const response = await getTareas();
-      setTareas(response.data);
+      // BUG #1 fix: envolver la recarga en try/catch para evitar excepción no capturada
+      try {
+        const response = await getTareas();
+        setTareas(response.data);
+      } catch (reloadErr) {
+        console.error("Error al recargar las tareas tras actualizar estado:", reloadErr);
+      }
     }
   };
 

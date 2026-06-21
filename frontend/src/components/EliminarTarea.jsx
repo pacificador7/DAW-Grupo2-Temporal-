@@ -10,7 +10,7 @@ import {
   Info 
 } from 'lucide-react';
 
-export default function EliminarTarea() {
+export default function EliminarTarea({ onTareaEliminada }) {
   const [buscarId, setBuscarId]     = useState('');
   const [tarea, setTarea]           = useState(null);
   const [modalVisible, setModal]    = useState(false);
@@ -55,6 +55,8 @@ export default function EliminarTarea() {
       setModal(false);
       setTarea(null);
       setBuscarId('');
+      // BUG #10 fix: notificar al ListadoTareas para que se refresque
+      if (onTareaEliminada) onTareaEliminada();
     } catch {
       setError('No se pudo eliminar la tarea. Intenta de nuevo.');
       setModal(false);

@@ -54,6 +54,15 @@ services:
     ports:
       - "8080:8080"               # Permite acceder al backend directamente (ej: Swagger)
 
+    # BUG #11 fix: healthcheck para que el frontend espere a que el backend
+    # este listo antes de arrancar (no solo que el proceso haya iniciado)
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
     networks:
       - app-network
 
@@ -67,7 +76,8 @@ services:
     restart: always
 
     depends_on:
-      - backend                   # Espera a que el backend este arrancado
+      backend:
+        condition: service_healthy  # BUG #11 fix: esperar a que el backend este healthy
 
     ports:
       - "80:80"                   # La app estara disponible en http://localhost
